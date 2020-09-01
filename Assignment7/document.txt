@@ -1,0 +1,82 @@
+# Name: Soumen Dutta
+# Roll number: 17CS10057
+
+# Name: Aditya Sawant
+# Roll number: 17CS10060
+
+## TABLE: Number of transmissions for different values of p.
+
+Chosen string: the quick brown fox jumps over the lazy dog
+String length: 43
+
++-------------------------------------------------------------------------+
+| p value |	no. of transmissions | avg no. of transmissions per character |
++-------------------------------------------------------------------------+
+| 0.05    | 49;47;47;46          | 1.099                                  |
+| 0.10    | 61;56;54;53          | 1.302                                  |
+| 0.15    | 56;62;48;60          | 1.314                                  |
+| 0.20    | 64;66;64;64          | 1.500                                  |
+| 0.25    | 81;75;76;88          | 1.860                                  |
+| 0.30    | 97;82;93;74          | 2.012                                  |
+| 0.35    | 111;87;119;89        | 2.360                                  |
+| 0.40    | 127;98;113;112       | 2.616                                  |
+| 0.45    | 122;144;143;133      | 3.151                                  |
+| 0.50    | 131;142;141;151	     | 3.285                                  |
++-------------------------------------------------------------------------+
+
+## MESSAGE FORMAT:
+
+We have used a structure 'struct message' to represent a message. The structure
+contains a character buffer (msg), message length (len) and socket address
+(sock_addr) (either source or destination).
+
+Character buffer (msg):
+	As mentioned in the assignment, the maximum size of the message can be 100
+	bytes, so its size is kept to be 102 bytes, two extra bytes for the message
+	type (application data message or acknowledgment) and message ID.
+
+len:
+	It contains the length of the message in bytes (including the two extra bytes
+	for type and ID).
+
+sock_addr:
+	It contains sockaddr structure and it can denote either the source socket
+	address (if it is a received message) or destination socket address (if it is
+	a message to be sent).
+
+First byte of the message (msg buffer):
+	Any message shared between two sides consists of a character 'd' if it is an
+	application data message or 'a' if it is an acknowledgment message.
+
+Second byte of the message (msg buffer):
+	The 2nd character of the message consists of message ID. As the total number
+	of messages is limited by 100, we can store message ID in just 1 byte. Then
+	remaning 100 characters hold the actual message.
+
+
+## DATA STRUCTURES:
+
+receive_buffer
+	It is an array of 100 messages (struct message).
+	It contains the application messages that are received.
+
+send_buffer
+	It is an array of 100 messages (struct message).
+	It contains the application messages that are to be sent.
+
+UnAckMsgTable
+	Linked list of unacknowledged messages made out of 'struct unAckMessage'.
+	Each node (struct unAckMessage) contains:
+		Message structure already described
+		Message ID
+		Structure to hold sending time
+		Next pointer for linked list implementation
+
+recvMsgTable
+	Integer array of size 100.
+	It contains all distinct messages ids that are received in the socket so far.
+	Maximum 100 ids can be present.
+
+** 	Given:
+	Maximum message length is 100.
+	Maximum number of packets  (MAX_PACKETS) is 100.
